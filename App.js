@@ -12,6 +12,7 @@ import type { Node } from 'react';
 import { Switch, Button } from 'react-native';
 import { Dimensions } from 'react-native'
 import AppButton from './components/AppButton';
+import Cup from './components/Cup';
 import {
     SafeAreaView,
     ScrollView,
@@ -60,7 +61,7 @@ var activeColor ="#3f1551";
 var boolColor = 'darkgrey';
 const App: () => Node = () => {
 
-
+const question = "Ready to Bool?"
 const boolLabel = "BOOL!";
     const [isShown, setIsShown] = useState(false);
 const toggleBool = () => {
@@ -70,7 +71,8 @@ const toggleBool = () => {
     return (
     <SafeAreaView style = { isShown ? styles.backgroundActive : styles.mainPage  } >
  <View style = { isShown ? styles.backgroundActiveContainer : styles.container  } >
- <Text style={isShown ? styles.labelActive : styles.labelInactive}>{boolLabel}</Text>
+    {isShown ? <Text style={isShown ? styles.labelActive : styles.labelInactive}>{boolLabel}</Text> : <Text style={styles.blandLetters}>{question}</Text>}
+
  </View>
         <View style = { isShown ? styles.backgroundActiveContainer : styles.container  } >
         <Switch style= {styles.boolSwitch} trackColor = {
@@ -83,9 +85,11 @@ const toggleBool = () => {
 
 
         </View>
-        <View style = { isShown ? styles.backgroundActiveContainer : styles.container  }>
+        <View style={ isShown ? styles.backgroundActiveContainerCup : styles.cupContainer  }>
+            <Cup flippedState={!isShown}/>
+            <View style={styles.spaceAround}>
             { isShown ?  <AppButton buttonBackground={styles.buttonBackground} buttonText={styles.buttonActive} title="Begin!" size="lg" backgroundColor="#e8ac74" />: null  }
-
+            </View>
         </View>
         </SafeAreaView>
     );
@@ -93,6 +97,18 @@ const toggleBool = () => {
 };
 
 const styles = StyleSheet.create({
+    blandLetters:{
+        fontFamily: 'Courier',
+        position: 'absolute',
+
+        marginTop: '10%',
+        textAlign: 'center',
+        color: "black",
+        fontSize: 70,
+    },
+    spaceAround: {
+        margin: 20,
+    },
     buttonBackground: {
         elevation: 8,
         backgroundColor: "#fc7b03",
@@ -125,6 +141,14 @@ const styles = StyleSheet.create({
          width: '100%',
         height: '100%',
     },
+    backgroundActiveContainerCup: {
+        color: "white",
+        backgroundColor: activeColor,
+        marginTop: '25%',
+        alignItems: 'center',
+        justifyContent: 'center',
+
+    },
     backgroundActiveContainer: {
         color: "white",
         backgroundColor: activeColor,
@@ -140,6 +164,12 @@ const styles = StyleSheet.create({
         backgroundColor: boolColor,
         width: '100%',
         height: '100%',
+    },
+    cupContainer: {
+        backgroundColor: boolColor,
+        marginTop: '25%',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     container: {
 
