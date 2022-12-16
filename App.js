@@ -11,7 +11,7 @@ import React, { useState } from 'react';
 import type { Node } from 'react';
 import { Switch, Button } from 'react-native';
 import { Dimensions } from 'react-native'
-
+import AppButton from './components/AppButton';
 import {
     SafeAreaView,
     ScrollView,
@@ -84,12 +84,7 @@ const toggleBool = () => {
 
         </View>
         <View style = { isShown ? styles.backgroundActiveContainer : styles.container  }>
-            { isShown ?  <Button
-            title="Begin"
-            backgroundColor="#e8ac74"
-            color='#fc7b03'
-            accessibilityLabel="Learn more about this purple button"
-            /> : null  }
+            { isShown ?  <AppButton buttonBackground={styles.buttonBackground} buttonText={styles.buttonActive} title="Begin!" size="lg" backgroundColor="#e8ac74" />: null  }
 
         </View>
         </SafeAreaView>
@@ -98,10 +93,19 @@ const toggleBool = () => {
 };
 
 const styles = StyleSheet.create({
+    buttonBackground: {
+        elevation: 8,
+        backgroundColor: "#fc7b03",
+        borderRadius: 10,
+        paddingVertical: 10,
+        paddingHorizontal: 12,
+    },
     buttonActive: {
-        backgroundColor:"#e8ac74",
-        color: '#fc7b03',
-        padding:  20,
+        fontSize: 25,
+        color: "#fff",
+        fontWeight: "bold",
+        alignSelf: "center",
+        textTransform: "uppercase"
     },
     labelInactive: {
 
