@@ -20,7 +20,9 @@ import {
     StyleSheet,
     Text,
     useColorScheme,
+    Animated,
     View,
+    Easing,
 } from 'react-native';
 
 import {
@@ -30,45 +32,34 @@ import {
     LearnMoreLinks,
     ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import { width } from '@mui/system';
-import { grey } from '@mui/material/colors';
+import { style } from '@mui/system';
 
+let rotateValueHolder = new Animated.Value(0);
 
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
  * LTI update could not be added via codemod */
-const Section = ({ children, title }): Node => {
-    const isDarkMode = useColorScheme() === 'dark';
-    return (
-    <View style = { styles.sectionContainer } >
-        <Text style = {
-            [
-                styles.sectionTitle,
-                {
-                    color: isDarkMode ? Colors.white : Colors.black,
-                },
-            ]
-        } > { title } </Text> <Text style = {
-            [
-                styles.sectionDescription,
-                {
-                    color: isDarkMode ? Colors.light : Colors.dark,
-                },
-            ]
-        } > { children } </Text> </View>
-    );
-};
+
 var activeColor ="#3f1551";
 var boolColor = 'darkgrey';
+var runOnce = 0;
 const App: () => Node = () => {
 
 const question = "Ready to Bool?"
 const boolLabel = "BOOL!";
-    const [isShown, setIsShown] = useState(false);
+const [isShown, setIsShown] = useState(false);
 const toggleBool = () => {
-    boolColor = 'red';
-    setIsShown((previousState) => !previousState);
-}
-    return (
+rotateValueHolder.setValue(isShown);
+ setIsShown((previousState) => !previousState);
+    Animated.timing(rotateValueHolder, {
+      toValue: !isShown,
+      duration: 300,
+      easing: Easing.linear,
+      useNativeDriver: false,
+    }).start();
+
+};
+
+return (
     <SafeAreaView style = { isShown ? styles.backgroundActive : styles.mainPage  } >
  <View style = { isShown ? styles.backgroundActiveContainer : styles.container  } >
     {isShown ? <Text style={isShown ? styles.labelActive : styles.labelInactive}>{boolLabel}</Text> : <Text style={styles.blandLetters}>{question}</Text>}
@@ -86,17 +77,37 @@ const toggleBool = () => {
 
         </View>
         <View style={ isShown ? styles.backgroundActiveContainerCup : styles.cupContainer  }>
-            <Cup flippedState={!isShown}/>
+            {isShown ? <Cup startPos={1} styleCup={styles.rotate} /> : <Cup startPos={0} styleCup={styles.rotate} />  }
             <View style={styles.spaceAround}>
-            { isShown ?  <AppButton buttonBackground={styles.buttonBackground} buttonText={styles.buttonActive} title="Begin!" size="lg" backgroundColor="#e8ac74" />: null  }
+            { isShown ?  <AppButton buttonBackground={styles.buttonBackground} buttonText={styles.buttonActive} title="View Map" size="lg" backgroundColor="#e8ac74" />: null  }
             </View>
         </View>
         </SafeAreaView>
     );
 
 };
+const RotateData = rotateValueHolder.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['180deg', '0deg'],
+  });
 
+const RotateReverse = rotateValueHolder.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '180deg'],
+})
 const styles = StyleSheet.create({
+    rotate: {
+        justifyContent: 'center',
+        width: 100,
+        height: 100,
+        transform: [{rotate: RotateReverse}],
+    },
+    basicCup: {
+        transform: [{rotate: RotateData}],
+        justifyContent: 'center',
+        width: 100,
+        height: 100,
+    },
     blandLetters:{
         fontFamily: 'Courier',
         position: 'absolute',
